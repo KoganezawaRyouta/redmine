@@ -170,7 +170,16 @@ default:
 # specific configuration options for production environment
 # that overrides the default ones
 production:
-
+  email_delivery:
+    delivery_method: :smtp
+    smtp_settings:
+      enable_starttls_auto: true
+      address: "smtp.gmail.com"
+      port: 587
+      domain: "smtp.gmail.com"
+      authentication: :plain
+      user_name: "sidepttraining@gmail.com"
+      password: "si_dept_training"
 # specific configuration options for development environment
 # that overrides the default ones
 development:
