@@ -84,13 +84,12 @@ default:
   email_delivery:
     delivery_method: :smtp
     smtp_settings:
-      enable_starttls_auto: true
-      address: "smtp.gmail.com"
-      port: 587
-      domain: "smtp.gmail.com"
+      address: "smtp.sendgrid.net"
+      port: 25
       authentication: :plain
-      user_name: "sidepttraining@gmail.com"
-      password: "si_dept_training"
+      domain: 'heroku.com'
+      user_name: 'app10513598@heroku.com'
+      password: 'tjxm7yjx'
 
   # Absolute path to the directory where attachments are stored.
   # The default is the 'files' directory in your Redmine instance.
