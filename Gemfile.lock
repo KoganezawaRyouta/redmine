@@ -136,7 +136,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbc-adapter (= 1.2.5)
-  activerecord-jdbcpostgresql-adapter
   builder (= 3.0.0)
   capybara (~> 2.0.0)
   coderay (~> 1.0.6)
