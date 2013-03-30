@@ -1,5 +1,5 @@
 # Redmine - project management software
-# Copyright (C) 2006-2012  Jean-Philippe Lang
+# Copyright (C) 2006-2013  Jean-Philippe Lang
 # Copyright (C) 2007  Patrick Aljord patcito@ŋmail.com
 #
 # This program is free software; you can redistribute it and/or
@@ -251,12 +251,12 @@ class Repository::Git < Repository
       :conditions => [
         "scmid IN (?)",
         revisions.map!{|c| c.scmid}
-      ],
-      :order => 'committed_on DESC'
+      ]
     )
   end
 
   def clear_extra_info_of_changesets
+    return if extra_info.nil?
     v = extra_info["extra_report_last_commit"]
     write_attribute(:extra_info, nil)
     h = {}

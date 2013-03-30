@@ -1,5 +1,5 @@
 # Redmine - project management software
-# Copyright (C) 2006-2012  Jean-Philippe Lang
+# Copyright (C) 2006-2013  Jean-Philippe Lang
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ class PreviewsControllerTest < ActionController::TestCase
            :member_roles,
            :members,
            :enabled_modules,
-           :workflows,
            :journals, :journal_details,
            :news
 
@@ -48,7 +47,7 @@ class PreviewsControllerTest < ActionController::TestCase
 
   def test_preview_journal_notes_for_update
     @request.session[:user_id] = 2
-    post :issue, :project_id => '1', :id => 1, :issue => {:notes => 'Foo'}
+    post :issue, :project_id => '1', :id => 1, :notes => 'Foo'
     assert_response :success
     assert_template 'preview'
     assert_not_nil assigns(:notes)

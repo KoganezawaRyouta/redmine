@@ -1,13 +1,12 @@
 <h2><%= @copy ? l(:button_copy) : l(:label_bulk_edit_selected_issues) %></h2>
 
-<ul><%= @issues.collect {|i|
-            content_tag('li',
-                        link_to(h("#{i.tracker} ##{i.id}"),
-                                { :action => 'show', :id => i }
-                            ) + h(": #{i.subject}"))
-         }.join("\n").html_safe %></ul>
+<ul id="bulk-selection">
+<% @issues.each do |issue| %>
+  <%= content_tag 'li', link_to_issue(issue) %>
+<% end %>
+</ul>
 
-<%= form_tag({:action => 'bulk_update'}, :id => 'bulk_edit_form') do %>
+<%= form_tag(bulk_update_issues_path, :id => 'bulk_edit_form') do %>
 <%= @issues.collect {|i| hidden_field_tag('ids[]', i.id)}.join("\n").html_safe %>
 <div class="box tabular">
 <fieldset class="attributes">
@@ -126,26 +125,26 @@
 </p>
 <% end %>
 </div>
-
 </fieldset>
 
-<fieldset><legend><%= l(:field_notes) %></legend>
+<fieldset>
+<legend><%= l(:field_notes) %></legend>
 <%= text_area_tag 'notes', @notes, :cols => 60, :rows => 10, :class => 'wiki-edit' %>
 <%= wikitoolbar_for 'notes' %>
 </fieldset>
 </div>
 
 <p>
-	<% if @copy %>
-	  <%= hidden_field_tag 'copy', '1' %>
-	  <%= submit_tag l(:button_copy) %>
-	  <%= submit_tag l(:button_copy_and_follow), :name => 'follow' %>
-	<% elsif @target_project %>
-	  <%= submit_tag l(:button_move) %>
-	  <%= submit_tag l(:button_move_and_follow), :name => 'follow' %>
-	<% else %>
-	  <%= submit_tag l(:button_submit) %>
-	<% end %>
+  <% if @copy %>
+    <%= hidden_field_tag 'copy', '1' %>
+    <%= submit_tag l(:button_copy) %>
+    <%= submit_tag l(:button_copy_and_follow), :name => 'follow' %>
+  <% elsif @target_project %>
+    <%= submit_tag l(:button_move) %>
+    <%= submit_tag l(:button_move_and_follow), :name => 'follow' %>
+  <% else %>
+    <%= submit_tag l(:button_submit) %>
+  <% end %>
 </p>
 
 <% end %>

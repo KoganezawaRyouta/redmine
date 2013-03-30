@@ -1,5 +1,5 @@
 # Redmine - project management software
-# Copyright (C) 2006-2012  Jean-Philippe Lang
+# Copyright (C) 2006-2013  Jean-Philippe Lang
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ module Redmine
 
         def extract_macro_options(args, *keys)
           options = {}
-          while args.last.to_s.strip =~ %r{^(.+)\=(.+)$} && keys.include?($1.downcase.to_sym)
+          while args.last.to_s.strip =~ %r{^(.+?)\=(.+)$} && keys.include?($1.downcase.to_sym)
             options[$1.downcase.to_sym] = $2
             args.pop
           end
@@ -147,10 +147,10 @@ module Redmine
           unless block_given?
             raise "Can not create a macro without a block!"
           end
-          name = name.to_sym if name.is_a?(String)
+          name = name.to_s.downcase.to_sym
           available_macros[name] = {:desc => @@desc || ''}.merge(options)
           @@desc = nil
-          Definitions.send :define_method, "macro_#{name}".downcase, &block
+          Definitions.send :define_method, "macro_#{name}", &block
         end
 
         # Sets description for the next macro to be defined

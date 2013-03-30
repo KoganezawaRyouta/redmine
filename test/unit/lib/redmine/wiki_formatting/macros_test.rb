@@ -1,5 +1,5 @@
 # Redmine - project management software
-# Copyright (C) 2006-2012  Jean-Philippe Lang
+# Copyright (C) 2006-2013  Jean-Philippe Lang
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -78,6 +78,12 @@ class Redmine::WikiFormatting::MacrosTest < ActionView::TestCase
     assert_equal "<p>Baz: (arg1,arg2) (String) (line1\nline2)</p>", textilizable("{{baz(arg1, arg2)\nline1\nline2\n}}")
   end
 
+  def test_macro_name_with_upper_case
+    Redmine::WikiFormatting::Macros.macro(:UpperCase) {|obj, args| "Upper"}
+
+    assert_equal "<p>Upper</p>", textilizable("{{UpperCase}}")
+  end
+
   def test_multiple_macros_on_the_same_line
     Redmine::WikiFormatting::Macros.macro :foo do |obj, args|
       args.any? ? "args: #{args.join(',')}" : "no args" 
@@ -100,6 +106,25 @@ class Redmine::WikiFormatting::MacrosTest < ActionView::TestCase
     assert_equal '<p>Hello world! Object: Issue, Called with no argument and no block of text.</p>', textilizable(text, :object => Issue.find(1))
   end
 
+  def test_extract_macro_options_should_with_args
+    options = extract_macro_options(["arg1", "arg2"], :foo, :size)
+    assert_equal([["arg1", "arg2"], {}], options)
+  end
+
+  def test_extract_macro_options_should_with_options
+    options = extract_macro_options(["foo=bar", "size=2"], :foo, :size)
+    assert_equal([[], {:foo => "bar", :size => "2"}], options)
+  end
+
+  def test_extract_macro_options_should_with_args_and_options
+    options = extract_macro_options(["arg1", "arg2", "foo=bar", "size=2"], :foo, :size)
+    assert_equal([["arg1", "arg2"], {:foo => "bar", :size => "2"}], options)
+  end
+
+  def test_extract_macro_options_should_parse_options_lazily
+    options = extract_macro_options(["params=x=1&y=2"], :params)
+    assert_equal([[], {:params => "x=1&y=2"}], options)
+  end
 
   def test_macro_exception_should_be_displayed
     Redmine::WikiFormatting::Macros.macro :exception do |obj, args|

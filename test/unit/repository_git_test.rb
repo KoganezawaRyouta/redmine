@@ -1,5 +1,5 @@
 # Redmine - project management software
-# Copyright (C) 2006-2012  Jean-Philippe Lang
+# Copyright (C) 2006-2013  Jean-Philippe Lang
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -220,7 +220,7 @@ class RepositoryGitTest < ActiveSupport::TestCase
     def test_keep_extra_report_last_commit_in_clear_changesets
       assert_nil @repository.extra_info
       h = {}
-      h["extra_report_last_commit"] = 1
+      h["extra_report_last_commit"] = "1"
       @repository.merge_extra_info(h)
       @repository.save
       @project.reload
@@ -232,7 +232,7 @@ class RepositoryGitTest < ActiveSupport::TestCase
       assert_equal NUM_REV, @repository.changesets.count
       @repository.send(:clear_changesets)
       assert_equal 1, @repository.extra_info.size
-      assert_equal 1, @repository.extra_info["extra_report_last_commit"]
+      assert_equal "1", @repository.extra_info["extra_report_last_commit"]
     end
 
     def test_refetch_after_clear_changesets
