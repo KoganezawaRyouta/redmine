@@ -47,6 +47,7 @@ if File.exist?(database_file)
       case adapter
       when /postgresql/
         gem "pg", ">= 0.11.0", :platforms => [:mri, :mingw]
+        gem "activerecord-jdbcpostgresql-adapter", :platforms => :jruby
       else
         warn("Unknown database adapter `#{adapter}` found in config/database.yml, use Gemfile.local to load your own database gems")
       end
@@ -56,17 +57,6 @@ if File.exist?(database_file)
   end
 else
   warn("Please configure your config/database.yml first")
-end
-
-group :development do
-  gem "rdoc", ">= 2.4.2"
-  gem "yard"
-end
-
-group :test do
-  gem "shoulda", "~> 3.3.2"
-  gem "mocha", "~> 0.13.3"
-  gem 'capybara', '~> 2.0.0'
 end
 
 local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")
