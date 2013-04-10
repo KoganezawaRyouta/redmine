@@ -677,7 +677,21 @@ module Redmine
 
       # Sorts a collection of issues by start_date, due_date, id for gantt rendering
       def sort_issues!(issues)
-        issues.sort! { |a, b| gantt_issue_compare(a, b) }
+        default_date = Date.new(1970, 1, 1)
+        issues.sort! do |a, b|
+          a_is_child = a.id != a.root_id ? 1 : 0
+          b_is_child = b.id != b.root_id ? 1 : 0
+          a_start_date = a.start_date || default_date
+          b_start_date = b.start_date || default_date
+          a_child_start_date = Issue.find(a.root_id).children.minimum(:start_date)
+          b_child_start_date = Issue.find(b.root_id).children.minimum(:start_date)
+          a_root_start_date = a_child_start_date || a_start_date
+          b_root_start_date = b_child_start_date || b_start_date
+          (a_root_start_date <=> b_root_start_date).nonzero? ||
+            (a.root_id <=> b.root_id).nonzero? ||
+            (a_is_child <=> b_is_child).nonzero? ||
+            (a_start_date <=> b_start_date)
+        end
       end
 
       # TODO: top level issues should be sorted by start date
